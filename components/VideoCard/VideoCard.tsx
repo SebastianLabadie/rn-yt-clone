@@ -19,12 +19,23 @@ type videoCardPropsType = {
 }
 
 function VideoCard({video}:videoCardPropsType) {
+
+    const minutes = Math.floor(video.duration / 60)
+    const seconds = video.duration % 60 
+
+    let viewsString = video.views.toString()
+    if(video.views > 1000000){
+        viewsString = (video.views / 1000000).toFixed(1) +  'm'
+    }else if(video.views > 1000) {
+        viewsString = (video.views / 1000).toFixed(1) +  'k'
+    }
+
     return (
         <View>
             <View>
                 <Image style={styles.thumbnail} source={{uri:video.thumbnail}} />
                 <View style={styles.timeContainer}>
-                    <Text style={styles.time}>{video.duration}</Text>
+                    <Text style={styles.time}>{minutes}:{seconds < 10 ? '0' : null}{seconds}</Text>
                 </View>
             </View>
 
@@ -34,7 +45,7 @@ function VideoCard({video}:videoCardPropsType) {
                 {/* middlecontainer title,subtitle,etx */}
                 <View style={styles.middleContainer}>
                     <Text style={styles.title}>{video.title}</Text>
-                    <Text style={styles.subTitle}>{video.user.name} {video.views} {video.createdAt}  </Text>
+                    <Text style={styles.subTitle}>{video.user.name} {viewsString} {video.createdAt}  </Text>
                 </View>
                 {/* tree icon */}
                 <Entypo name="dots-three-vertical" size={18} color="white" />
