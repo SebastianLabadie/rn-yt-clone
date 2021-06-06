@@ -1,10 +1,14 @@
 import { AntDesign, FontAwesome, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 import React from 'react'
 import {View,StyleSheet,Text, Image} from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler'
+import { FlatList, ScrollView } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
+import videos from '../assets/data/videos.json'
 import video from '../assets/data/video.json'
+import comments from '../assets/data/comments.json'
+import VideoCard from '../components/VideoCard/VideoCard'
+import VideoPlayer from '../components/VideoPlayer/VideoPlayer'
 
 function VideoScreen() {
 
@@ -18,7 +22,7 @@ function VideoScreen() {
     return (
         <SafeAreaView>
             {/* Video Player */}
-            <Image style={styles.videoPlayer} source={{uri:video.thumbnail}} />
+            <VideoPlayer videoUrl={video.videoUrl} thmbnailUrl={video.thumbnail} />
             
             
             {/*  Video Info */}
@@ -65,12 +69,47 @@ function VideoScreen() {
             </ScrollView>
             
             {/*  User Info */}
-            
-            {/* Comments */}
+            <View style={styles.userInfoContainer}>
+                <Image style={styles.avatar} source={{uri:video.user.image}} />
 
-            {/* Recommends Videos */}
+                <View style={styles.userInfoTxtContainer}>
+                    <Text style={styles.txtUserName}>{video.user.name}</Text>
+                    <Text style={styles.txtUserSubs}>{video.user.subscribers} subscribers</Text>
+                </View>
+
+                <Text style={styles.btnSubscribe}>Subscribe</Text>
+            </View>
+
+            {/* Comments */}
+            <View style={styles.commentsContainer}>
+            <Text style={styles.txtCommentsCount}>Comments {comments.length}</Text>
+
+            <View style={styles.commentContainer}>
+                <Image style={styles.commentAvatar} source={{uri:video.user.image}} />
+
+                <View style={styles.commentTxtContainer}>
+                    <Text style={styles.txtComment}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore, nemo!</Text>
+                </View>
+
+            </View>
+
+            </View>
             
+           
         </SafeAreaView>
+    )
+}
+
+function videoWitchRecomendation(){
+    return(
+          <FlatList 
+          keyExtractor={(item)=>item.id} 
+          data={videos} renderItem={({item})=><VideoCard 
+          video={item} />} 
+          ListHeaderComponent={
+              <VideoScreen />
+          }
+          />
     )
 }
 
@@ -99,8 +138,10 @@ const styles = StyleSheet.create({
         fontSize:14,
         fontWeight:'500'
     },
+    /* ACTIONS */
     actionListContainer:{
         flexDirection:'row',
+        marginVertical:15
     },
     actionListItem:{
         width:80,
@@ -111,5 +152,64 @@ const styles = StyleSheet.create({
     actionText:{
         color:'white'
     },
+    /* USER */
+    avatar:{
+        width:50,
+        height:50,
+        borderRadius:25,
+    },
+    userInfoContainer:{
+        flexDirection:'row',
+        alignItems:'center',
+        marginHorizontal:10,
+        paddingVertical:10,
+        borderColor:'#3d3d3d',
+        borderBottomWidth:1,
+        borderTopWidth:1
+    },
+    userInfoTxtContainer:{
+        flex:1,
+        marginHorizontal:10,
+    },
+    txtUserName:{
+        color:'white',
+        fontWeight:'bold'
+    },
+    txtUserSubs:{
+        color:'lightgrey'
+    },
+    btnSubscribe:{
+        color:'red',
+        fontSize:20,
+        fontWeight:'bold'
+    },
+    /* COMMENTS */
+    commentsContainer:{
+
+    },
+    txtCommentsCount:{
+        color:'white',
+        fontWeight:'bold',
+        margin:10,
+        fontSize:18
+    },
+    commentContainer:{
+        flexDirection:'row',
+        alignItems:'center',
+        marginHorizontal:10,
+        paddingVertical:10,
+    },
+    commentAvatar:{
+        width:35,
+        height:35,
+        borderRadius:17,
+    },
+    commentTxtContainer:{
+        flex:1,
+        marginHorizontal:10,
+    },
+    txtComment:{
+        color:'white',
+    },
 })
-export default VideoScreen
+export default videoWitchRecomendation
