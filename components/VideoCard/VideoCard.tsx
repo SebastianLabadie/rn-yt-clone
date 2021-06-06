@@ -1,6 +1,8 @@
 import { Entypo } from '@expo/vector-icons'
+import { useNavigation } from '@react-navigation/core'
 import React from 'react'
 import {View,StyleSheet,Text, Image} from 'react-native'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 type videoCardPropsType = {
     video:{
@@ -30,8 +32,10 @@ function VideoCard({video}:videoCardPropsType) {
         viewsString = (video.views / 1000).toFixed(1) +  'k'
     }
 
+    const navigation = useNavigation()
+
     return (
-        <View>
+        <TouchableWithoutFeedback onPress={()=>navigation.navigate('VideoScreen')}>
             <View>
                 <Image style={styles.thumbnail} source={{uri:video.thumbnail}} />
                 <View style={styles.timeContainer}>
@@ -50,7 +54,7 @@ function VideoCard({video}:videoCardPropsType) {
                 {/* tree icon */}
                 <Entypo name="dots-three-vertical" size={18} color="white" />
             </View>
-        </View>
+        </TouchableWithoutFeedback>
     )
 }
 
