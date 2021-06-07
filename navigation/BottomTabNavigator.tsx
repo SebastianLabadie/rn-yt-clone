@@ -3,7 +3,7 @@
  * https://reactnavigation.org/docs/bottom-tab-navigator
  */
 
-import { Ionicons } from '@expo/vector-icons';
+import { AntDesign, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
@@ -12,7 +12,7 @@ import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import TabOneScreen from '../screens/TabOneScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
-import { BottomTabParamList, TabTwoParamList } from '../types';
+import {  TabTwoParamList } from '../types';
 import HomeScreen from '../screens/HomeScreen';
 import VideoScreen from '../screens/VideoScreen';
 
@@ -32,11 +32,32 @@ export default function BottomTabNavigator() {
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
         }}
       />
-      <BottomTab.Screen
-        name="TabTwo"
+           <BottomTab.Screen
+        name="Explore"
         component={TabTwoNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => <Ionicons name="compass-outline" size={24} color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="New"
+        component={TabTwoNavigator}
+        options={{
+          tabBarIcon: ({ color }) => <AntDesign name="pluscircleo" size={24} color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Subscriptions"
+        component={TabTwoNavigator}
+        options={{
+          tabBarIcon: ({ color }) => <MaterialIcons name="subscriptions" size={24} color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Library"
+        component={TabTwoNavigator}
+        options={{
+          tabBarIcon: ({ color }) => <MaterialIcons name="video-collection" size={24} color={color} />,
         }}
       />
     </BottomTab.Navigator>

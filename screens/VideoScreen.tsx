@@ -1,6 +1,6 @@
 import { AntDesign, FontAwesome, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
-import React from 'react'
-import {View,StyleSheet,Text, Image} from 'react-native'
+import React, { useRef } from 'react'
+import {View,StyleSheet,Text, Image, Pressable} from 'react-native'
 import { FlatList, ScrollView } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
@@ -9,8 +9,12 @@ import video from '../assets/data/video.json'
 import comments from '../assets/data/comments.json'
 import VideoCard from '../components/VideoCard/VideoCard'
 import VideoPlayer from '../components/VideoPlayer/VideoPlayer'
+import BottomSheet, { BottomSheetModal,BottomSheetModalProvider } from '@gorhom/bottom-sheet'
+import VideoComments from '../components/VideoComments/VideoComments'
 
 function VideoScreen() {
+
+    const commentSheetRef = useRef<BottomSheetModal>(null)
 
     let viewsString = video.views.toString()
     if(video.views > 1000000){
@@ -19,97 +23,113 @@ function VideoScreen() {
         viewsString = (video.views / 1000).toFixed(1) +  'k'
     }
 
+    const handleOpenComments = () =>{
+        commentSheetRef.current?.present()
+    }
+
     return (
         <SafeAreaView>
             {/* Video Player */}
             <VideoPlayer videoUrl={video.videoUrl} thmbnailUrl={video.thumbnail} />
             
-            
-            {/*  Video Info */}
-            <View style={styles.middleContainer}>
-                <Text style={styles.tags}>{video.tags}</Text>
-                <Text style={styles.title}>{video.title}</Text>
-                <Text style={styles.subTitle}>{video.user.name} {viewsString} {video.createdAt}  </Text>
-            </View>
-
-            {/* Action List */}
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.actionListContainer}>
-                <View style={styles.actionListItem}>
-                    <AntDesign name="like2" size={30} color="white" />
-                    <Text style={styles.actionText}>{video.likes}</Text>
-                </View>
-                <View style={styles.actionListItem}>
-                    <AntDesign name="dislike2" size={30} color="white" />
-                    <Text style={styles.actionText}>{video.dislikes}</Text>
-                </View>
-                <View style={styles.actionListItem}>
-                    <AntDesign name="download" size={30} color="white" />
-                    <Text style={styles.actionText}>Download</Text>
-                </View>
-                <View style={styles.actionListItem}>
-                    <MaterialCommunityIcons name="share-outline" size={30} color="white" />
-                    <Text style={styles.actionText}>Share</Text>
-                </View>
-                <View style={styles.actionListItem}>
-                    <Ionicons name="md-chatbubbles-outline" size={30} color="white" />
-                    <Text style={styles.actionText}>Live Chat</Text>
-                </View>
-                <View style={styles.actionListItem}>
-                    <Ionicons name="md-chatbubbles-outline" size={30} color="white" />
-                    <Text style={styles.actionText}>Live Chat</Text>
-                </View>
-                <View style={styles.actionListItem}>
-                    <Ionicons name="md-chatbubbles-outline" size={30} color="white" />
-                    <Text style={styles.actionText}>Live Chat</Text>
-                </View>
-                <View style={styles.actionListItem}>
-                    <Ionicons name="md-chatbubbles-outline" size={30} color="white" />
-                    <Text style={styles.actionText}>Live Chat</Text>
-                </View>
-            </ScrollView>
-            
-            {/*  User Info */}
-            <View style={styles.userInfoContainer}>
-                <Image style={styles.avatar} source={{uri:video.user.image}} />
-
-                <View style={styles.userInfoTxtContainer}>
-                    <Text style={styles.txtUserName}>{video.user.name}</Text>
-                    <Text style={styles.txtUserSubs}>{video.user.subscribers} subscribers</Text>
+            <View style={{flex:1}}>
+                    
+                {/*  Video Info */}
+                <View style={styles.middleContainer}>
+                    <Text style={styles.tags}>{video.tags}</Text>
+                    <Text style={styles.title}>{video.title}</Text>
+                    <Text style={styles.subTitle}>{video.user.name} {viewsString} {video.createdAt}  </Text>
                 </View>
 
-                <Text style={styles.btnSubscribe}>Subscribe</Text>
-            </View>
+                {/* Action List */}
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.actionListContainer}>
+                    <View style={styles.actionListItem}>
+                        <AntDesign name="like2" size={30} color="white" />
+                        <Text style={styles.actionText}>{video.likes}</Text>
+                    </View>
+                    <View style={styles.actionListItem}>
+                        <AntDesign name="dislike2" size={30} color="white" />
+                        <Text style={styles.actionText}>{video.dislikes}</Text>
+                    </View>
+                    <View style={styles.actionListItem}>
+                        <AntDesign name="download" size={30} color="white" />
+                        <Text style={styles.actionText}>Download</Text>
+                    </View>
+                    <View style={styles.actionListItem}>
+                        <MaterialCommunityIcons name="share-outline" size={30} color="white" />
+                        <Text style={styles.actionText}>Share</Text>
+                    </View>
+                    <View style={styles.actionListItem}>
+                        <Ionicons name="md-chatbubbles-outline" size={30} color="white" />
+                        <Text style={styles.actionText}>Live Chat</Text>
+                    </View>
+                    <View style={styles.actionListItem}>
+                        <Ionicons name="md-chatbubbles-outline" size={30} color="white" />
+                        <Text style={styles.actionText}>Live Chat</Text>
+                    </View>
+                    <View style={styles.actionListItem}>
+                        <Ionicons name="md-chatbubbles-outline" size={30} color="white" />
+                        <Text style={styles.actionText}>Live Chat</Text>
+                    </View>
+                    <View style={styles.actionListItem}>
+                        <Ionicons name="md-chatbubbles-outline" size={30} color="white" />
+                        <Text style={styles.actionText}>Live Chat</Text>
+                    </View>
+                </ScrollView>
+                
+                {/*  User Info */}
+                <View style={styles.userInfoContainer}>
+                    <Image style={styles.avatar} source={{uri:video.user.image}} />
 
-            {/* Comments */}
-            <View style={styles.commentsContainer}>
-            <Text style={styles.txtCommentsCount}>Comments {comments.length}</Text>
+                    <View style={styles.userInfoTxtContainer}>
+                        <Text style={styles.txtUserName}>{video.user.name}</Text>
+                        <Text style={styles.txtUserSubs}>{video.user.subscribers} subscribers</Text>
+                    </View>
 
-            <View style={styles.commentContainer}>
-                <Image style={styles.commentAvatar} source={{uri:video.user.image}} />
-
-                <View style={styles.commentTxtContainer}>
-                    <Text style={styles.txtComment}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore, nemo!</Text>
+                    <Text style={styles.btnSubscribe}>Subscribe</Text>
                 </View>
 
-            </View>
+                {/* Comments */}
+                <View style={styles.commentsContainer}>
+                <Text style={styles.txtCommentsCount}>Comments {comments.length}</Text>
 
-            </View>
-            
-           
+                <Pressable onPress={handleOpenComments} style={styles.commentContainer}>
+                    <Image style={styles.commentAvatar} source={{uri:video.user.image}} />
+
+                    <View style={styles.commentTxtContainer}>
+                        <Text style={styles.txtComment}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore, nemo!</Text>
+                    </View>
+
+                </Pressable>
+
+                </View>
+                
+                {/* All Comments */}
+                <BottomSheetModal
+                snapPoints={['75%']} 
+                index={0}
+                ref={commentSheetRef}
+                
+                >
+                    <VideoComments />
+                </BottomSheetModal>
+                </View>
         </SafeAreaView>
     )
 }
 
 function videoWitchRecomendation(){
     return(
-          <FlatList 
-          keyExtractor={(item)=>item.id} 
-          data={videos} renderItem={({item})=><VideoCard 
-          video={item} />} 
-          ListHeaderComponent={
-              <VideoScreen />
-          }
-          />
+        <BottomSheetModalProvider  >
+            <FlatList 
+            keyExtractor={(item)=>item.id} 
+            data={videos} renderItem={({item})=><VideoCard 
+            video={item} />} 
+            ListHeaderComponent={
+                <VideoScreen />
+            }
+            />
+        </BottomSheetModalProvider>
     )
 }
 

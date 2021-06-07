@@ -8,10 +8,6 @@ export type RootStackParamList = {
   NotFound: undefined;
 };
 
-export type BottomTabParamList = {
-  Home: undefined;
-  TabTwo: undefined;
-};
 
 export type TabOneParamList = {
   TabOneScreen: undefined;
